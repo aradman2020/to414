@@ -20,5 +20,16 @@ ufc_data <- read.csv("preprocessed_data.csv")
 str(ufc_data)
 
 summary(ufc_data)
+head(ufc_data)
+ufc_data$B_draw <- NULL
+ufc_data$R_draw <- NULL
+
+ufc_data$Winner <- ifelse(ufc_data$Winner == "Blue", 1, 0)
+
+str(ufc_data)
+winner <- glm(Winner ~., data = ufc_data, family = binomial)
+
+summary(winner)
+summary(ufc_data)
 ```
 
