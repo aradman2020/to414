@@ -91,6 +91,8 @@ ufc_data$Delta_HEAD_Prop = ufc_data$B_avg_HEAD_Prop - ufc_data$R_avg_HEAD_Prop
 ufc_data$Delta_LEG_Prop = ufc_data$B_avg_LEG_Prop - ufc_data$R_avg_LEG_Prop
 ufc_data$Delta_TOTAL_STR_Prop = ufc_data$B_avg_TOTAL_STR_Prop - ufc_data$R_avg_TOTAL_STR_Prop
 
+
+
 ufc_data$Delta_BODY_Opp_Prop = ufc_data$B_avg_opp_BODY_Prop - ufc_data$R_avg_opp_BODY_Prop
 
 ufc_data$Delta_CLINCH_Opp_Prop = ufc_data$B_avg_opp_CLINCH_Prop - ufc_data$R_avg_opp_CLINCH_Prop
@@ -123,10 +125,15 @@ strawWeightWomen = ufc_data[ufc_data$weight_class_Women.s.Strawweight==1,]
 
 
 
+# Looking specifically at bantamWeightMen
 
+winner <- glm(Winner ~ bantamWeightMen$Delta_BODY_Prop + bantamWeightMen$Delta_CLINCH_Prop + bantamWeightMen$Delta_DISTANCE_Prop + bantamWeightMen$Delta_GROUND_Prop + bantamWeightMen$Delta_HEAD_Prop + bantamWeightMen$Delta_LEG_Prop + bantamWeightMen$Delta_TOTAL_STR_Prop, data = bantamWeightMen, family = binomial)
 
+summary(winner)
 
-head(ufc_data)
+winnerc <- glm(Winner ~ catchWeightMen$Delta_BODY_Prop + catchWeightMen$Delta_CLINCH_Prop + catchWeightMen$Delta_DISTANCE_Prop + catchWeightMen$Delta_GROUND_Prop + catchWeightMen$Delta_HEAD_Prop + catchWeightMen$Delta_LEG_Prop + catchWeightMen$Delta_TOTAL_STR_Prop, data = catchWeightMen, family = binomial)
+
+summary(winnerc)
 
 
 
