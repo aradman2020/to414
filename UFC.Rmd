@@ -18,6 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ufc_data <- read.csv("preprocessed_data.csv")
 
 str(ufc_data)
+head(ufc_data)
 
 summary(ufc_data)
 head(ufc_data)
@@ -26,10 +27,109 @@ ufc_data$R_draw <- NULL
 
 ufc_data$Winner <- ifelse(ufc_data$Winner == "Blue", 1, 0)
 
-str(ufc_data)
-winner <- glm(Winner ~., data = ufc_data, family = binomial)
+ufc_data$DeltaHeight = ufc_data$B_Height_cms - ufc_data$R_Height_cms
+ufc_data$DeltaReach = ufc_data$B_Reach_cms - ufc_data$R_Reach_cms
+ufc_data$DeltaWeight = ufc_data$B_Weight_lbs - ufc_data$R_Weight_lbs
 
-summary(winner)
-summary(ufc_data)
+ufc_data$Delta_Losing_Streak = ufc_data$B_current_lose_streak - ufc_data$R_current_lose_streak
+
+ufc_data$Delta_Winning_Streak = ufc_data$B_current_win_streak - ufc_data$R_current_win_streak 
+
+ufc_data$B_avg_BODY_Prop = ufc_data$B_avg_BODY_landed/ufc_data$B_avg_BODY_att
+ufc_data$B_avg_CLINCH_Prop = ufc_data$B_avg_CLINCH_landed/ufc_data$B_avg_CLINCH_att
+ufc_data$B_avg_DISTANCE_Prop = ufc_data$B_avg_DISTANCE_landed/ufc_data$B_avg_DISTANCE_att
+ufc_data$B_avg_GROUND_Prop = ufc_data$B_avg_GROUND_landed/ufc_data$B_avg_GROUND_att
+ufc_data$B_avg_HEAD_Prop = ufc_data$B_avg_HEAD_landed/ufc_data$B_avg_HEAD_att
+ufc_data$B_avg_LEG_Prop = ufc_data$B_avg_LEG_landed/ufc_data$B_avg_LEG_att
+ufc_data$B_avg_TOTAL_STR_Prop = ufc_data$B_avg_TOTAL_STR_landed / ufc_data$B_avg_TOTAL_STR_att
+
+
+ufc_data$B_avg_opp_BODY_Prop = ufc_data$B_avg_opp_BODY_landed/ufc_data$B_avg_opp_BODY_att
+
+ufc_data$B_avg_opp_CLINCH_Prop = ufc_data$B_avg_opp_CLINCH_landed/ufc_data$B_avg_opp_CLINCH_att
+
+ufc_data$B_avg_opp_DISTANCE_Prop = ufc_data$B_avg_opp_DISTANCE_landed/ufc_data$B_avg_opp_DISTANCE_att
+
+ufc_data$B_avg_opp_GROUND_Prop = ufc_data$B_avg_opp_GROUND_landed/ufc_data$B_avg_opp_GROUND_att
+
+ufc_data$B_avg_opp_HEAD_Prop = ufc_data$B_avg_opp_HEAD_landed/ufc_data$B_avg_opp_HEAD_att
+
+ufc_data$B_avg_opp_LEG_Prop = ufc_data$B_avg_opp_LEG_landed/ufc_data$B_avg_opp_LEG_att
+
+ufc_data$B_avg_opp_TOTAL_STR_Prop = ufc_data$B_avg_opp_TOTAL_STR_landed / ufc_data$B_avg_opp_TOTAL_STR_att
+
+
+
+ufc_data$R_avg_BODY_Prop = ufc_data$R_avg_BODY_landed/ufc_data$R_avg_BODY_att
+ufc_data$R_avg_CLINCH_Prop = ufc_data$R_avg_CLINCH_landed/ufc_data$R_avg_CLINCH_att
+ufc_data$R_avg_DISTANCE_Prop = ufc_data$R_avg_DISTANCE_att/ufc_data$R_avg_DISTANCE_landed
+ufc_data$R_avg_GROUND_Prop = ufc_data$R_avg_GROUND_landed/ufc_data$R_avg_GROUND_att
+ufc_data$R_avg_HEAD_Prop = ufc_data$R_avg_HEAD_landed/ufc_data$R_avg_HEAD_att
+ufc_data$R_avg_LEG_Prop = ufc_data$R_avg_LEG_landed/ufc_data$R_avg_LEG_att
+ufc_data$R_avg_TOTAL_STR_Prop = ufc_data$R_avg_TOTAL_STR_landed / ufc_data$R_avg_TOTAL_STR_att
+
+
+ufc_data$R_avg_opp_BODY_Prop = ufc_data$R_avg_opp_BODY_landed/ufc_data$B_avg_opp_BODY_att
+
+ufc_data$R_avg_opp_CLINCH_Prop = ufc_data$R_avg_opp_CLINCH_landed/ufc_data$R_avg_opp_CLINCH_att
+
+ufc_data$R_avg_opp_DISTANCE_Prop = ufc_data$R_avg_opp_DISTANCE_landed/ufc_data$R_avg_opp_DISTANCE_att
+
+ufc_data$R_avg_opp_GROUND_Prop = ufc_data$R_avg_opp_GROUND_landed/ufc_data$R_avg_opp_GROUND_att
+
+ufc_data$R_avg_opp_HEAD_Prop = ufc_data$R_avg_opp_HEAD_landed/ufc_data$R_avg_opp_HEAD_att
+
+ufc_data$R_avg_opp_LEG_Prop = ufc_data$R_avg_opp_LEG_landed/ufc_data$R_avg_opp_LEG_att
+
+ufc_data$R_avg_opp_TOTAL_STR_Prop = ufc_data$R_avg_opp_TOTAL_STR_landed / ufc_data$R_avg_opp_TOTAL_STR_att
+
+ufc_data$Delta_BODY_Prop = ufc_data$B_avg_BODY_Prop - ufc_data$R_avg_BODY_Prop
+ufc_data$Delta_CLINCH_Prop = ufc_data$B_avg_CLINCH_Prop - ufc_data$R_avg_CLINCH_Prop
+ufc_data$Delta_DISTANCE_Prop = ufc_data$B_avg_DISTANCE_Prop - ufc_data$R_avg_DISTANCE_Prop
+ufc_data$Delta_GROUND_Prop = ufc_data$B_avg_GROUND_Prop - ufc_data$R_avg_GROUND_Prop
+ufc_data$Delta_HEAD_Prop = ufc_data$B_avg_HEAD_Prop - ufc_data$R_avg_HEAD_Prop
+ufc_data$Delta_LEG_Prop = ufc_data$B_avg_LEG_Prop - ufc_data$R_avg_LEG_Prop
+ufc_data$Delta_TOTAL_STR_Prop = ufc_data$B_avg_TOTAL_STR_Prop - ufc_data$R_avg_TOTAL_STR_Prop
+
+ufc_data$Delta_BODY_Opp_Prop = ufc_data$B_avg_opp_BODY_Prop - ufc_data$R_avg_opp_BODY_Prop
+
+ufc_data$Delta_CLINCH_Opp_Prop = ufc_data$B_avg_opp_CLINCH_Prop - ufc_data$R_avg_opp_CLINCH_Prop
+
+ufc_data$Delta_DISTANCE_Opp_Prop = ufc_data$B_avg_opp_DISTANCE_Prop - ufc_data$R_avg_opp_DISTANCE_Prop
+
+ufc_data$Delta_GROUND_Opp_Prop = ufc_data$B_avg_opp_GROUND_Prop - ufc_data$R_avg_opp_GROUND_Prop
+
+ufc_data$Delta_HEAD_Opp_Prop = ufc_data$B_avg_opp_HEAD_Prop - ufc_data$R_avg_opp_HEAD_Prop
+
+ufc_data$Delta_LEG_Opp_Prop = ufc_data$B_avg_opp_LEG_Prop - ufc_data$R_avg_opp_LEG_Prop
+
+ufc_data$Delta_TOTAL_STR_Opp_Prop = ufc_data$B_avg_opp_TOTAL_STR_Prop - ufc_data$R_avg_opp_TOTAL_STR_Prop
+
+
+bantamWeightMen = ufc_data[ufc_data$weight_class_Bantamweight==1,]
+catchWeightMen = ufc_data[ufc_data$weight_class_Catch.Weight==1,]
+featherWeightMen = ufc_data[ufc_data$weight_class_Featherweight==1,]
+flyWeightMen = ufc_data[ufc_data$weight_class_Flyweight==1,]
+heavyWeightMen = ufc_data[ufc_data$weight_class_Heavyweight==1,]
+lightHeavyWeightMen = ufc_data[ufc_data$weight_class_Light.Heavyweight==1,]
+lightWeightMen = ufc_data[ufc_data$weight_class_Lightweight==1,]
+middleWeightMen = ufc_data[ufc_data$weight_class_Middleweight==1,]
+openWeightMen = ufc_data[ufc_data$weight_class_Open.Weight==1,]
+welterWeightMen = ufc_data[ufc_data$weight_class_Welterweight==1,]
+bantamWeightWomen = ufc_data[ufc_data$weight_class_Women.s.Bantamweight==1,]
+featherWeightWomen = ufc_data[ufc_data$weight_class_Women.s.Featherweight==1,]
+flyWeightWomen = ufc_data[ufc_data$weight_class_Women.s.Flyweight==1,]
+strawWeightWomen = ufc_data[ufc_data$weight_class_Women.s.Strawweight==1,]
+
+
+
+
+
+
+head(ufc_data)
+
+
+
+
 ```
 
